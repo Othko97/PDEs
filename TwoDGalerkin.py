@@ -9,6 +9,7 @@ However hopefully in future this will become more general"""
 import math
 import numpy as np
 import scipy.integrate as intgr
+import matplotlib.pyplot as plt
 
 ###########
 #FUNCTIONS#
@@ -32,6 +33,9 @@ def scalarprod(a, f):
   """Take scalar product of a scalar a and a function f i.e. af = af(x)"""
   return lambda x: a * f(x)
 
+def compare(f, g, step):
+  """Returns an array of the differences between f(x_i), g(x_i) where x_i= i * step"""
+  return [abs((f(step*x) - g(step*x))) for x in range(0, int(1/step))]
 
 #Functions on lists of functions (can be thought of as vectors in H_k)
 def multiscalarprod(A, F):
@@ -157,3 +161,22 @@ def sol_func_BC(n, f):
   H = generate_H(n)[1:n]
   betas = [i[0] for i in solve_BC(n, f).tolist()]
   return fsum(multiscalarprod(betas, H))
+
+#Plotting
+def plot(f, step):
+  X = [step*x for x in range(int(1/step)+1)]
+  Y = [f(x) for x in X]
+
+  plt.plot(X, Y)
+  plt.show()
+
+def compare_plot(f, g, step):
+  X = [step*x for x in range(int(1/step)+1)]
+  Yf = [f(x) for x in X]
+  Yg = [g(x) for x in X]
+
+  plt.plot(X, Yf, 'r', X, Yg, 'b')
+  plt.xlabel('x')
+  plt.ylabel('y')
+  plt.legend()
+  plt.show()
