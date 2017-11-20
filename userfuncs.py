@@ -9,7 +9,3 @@ from math import *
 #FUNCTION STORAGE#
 ##################
 
-
-
-def g(x):
-  return x **4

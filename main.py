@@ -31,12 +31,24 @@ def newfunc(s):
 
 def delfunc(func):
   """Deletes a user defined function from userfuncs.py"""
+  print("deleting??")
   with open("userfuncs.py", "r") as usrfs:
-    lines = uf.readlines()
+    lines = usrfs.readlines()
   with open("userfuncs.py", "w") as usrfs:
-    for line in lines:
-      if line != f"def {func}:\n":
+    count = 4
+    for i in range(len(lines)-1):
+      line = lines[i]
+      if line != f"def {func}(x):\n":
         usrfs.write(line)
+      else:
+        i += 3
+
+
+
+###########
+#VARIABLES#
+###########
+
 
 
 
@@ -46,7 +58,7 @@ def delfunc(func):
 
 def main():
   run = True
-  
+
   while run == True:
     command = input(">> ").upper()
 
