@@ -31,7 +31,6 @@ def newfunc(s):
 
 def delfunc(func):
   """Deletes a user defined function from userfuncs.py"""
-  print("deleting??")
   with open("userfuncs.py", "r") as usrfs:
     lines = usrfs.readlines()
   with open("userfuncs.py", "w") as usrfs:
@@ -48,9 +47,9 @@ def delfunc(func):
 ###########
 #VARIABLES#
 ###########
-
-
-
+with open("userfuncs.py", "r") as usrfs:
+  user_funcs_init = usrfs.readlines()
+step = 0.001
 
 ########################
 #DEFINING MAIN FUNCTION#
@@ -64,9 +63,12 @@ def main():
 
     if command == "QUIT":
       run = False
+      with open("userfuncs.py", "w+") as usrfs:
+        for line in user_funcs_init:
+          usrfs.write(line)
     
     elif command == "APPROX":
-      print("Finite Element Method Galerkin Approximation to -u''(x) = RHS on (0,1) with u(0)=0, u'(1)=0")
+      print("\nFinite Element Method Galerkin Approximation to -u''(x) = RHS on (0,1) with u(0)=0, u'(1)=0")
       RHSfunc = input("Enter RHS(x): ")
       if not hasattr(uf, RHSfunc):
         newfunc(f"RHS(x) = {RHSfunc}")
@@ -80,8 +82,15 @@ def main():
 
       print(u"\n Given basis functions h_i(x), u(x) = \u03A3(\u03B2_i * h_i)")
 
-      for i in range(1, n+1):
-        print(f"\u03B2_{i}: {B[i][0]}")
+      for i in range(0, n):
+        print(f"\u03B2_{i+1}: {B[i][0]}")
+
+      print("\nSave solution as (leave blank to not save): ")
+      name = input(">>> ")
+      if name != "":
+        setattr(uf, name, sol_func_BC(n, rhs)) 
+      
+      print()
     
     elif command == "NEW":
       print("\nEnter function in the form 'f(x) = <algebraic expression>'")
@@ -90,10 +99,12 @@ def main():
     elif command == "PLOT":
       print("\nEnter function: ")
       func = input(">>> ")
-      if not hasattr(uf, RHSfunc):
-        newfunc(f"RHS(x) = {RHSfunc}")
-        rhs = getattr(uf, "RHS")
+      if not hasattr(uf, func):
+        newfunc(f"temp(x) = {func}")
+        temp = getattr(uf, "temp")
       else:
-        rhs = getattr(uf, RHSfunc)
+        temp = getattr(uf, func)
+      plot(temp, step)
+      
 
 main()
