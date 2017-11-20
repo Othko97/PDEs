@@ -168,6 +168,8 @@ def plot(f, step):
   Y = [f(x) for x in X]
 
   plt.plot(X, Y)
+  plt.xlabel('x')
+  plt.ylabel('y')
   plt.show()
 
 def compare_plot(f, g, step):
