@@ -6,6 +6,7 @@
 from TwoDGalerkin import *
 import userfuncs as uf
 import importlib
+import time
 
 ###########
 #FUNCTIONS#
@@ -107,18 +108,25 @@ def main():
       plot(temp, step)
     
     elif command == "COMPARE":
+      with open("userfuncs.py", "r") as usrfs:
+        user_funcs_before = usrfs.readlines()
       print("\nEnter Functions separated by a comma (,):")
       funcs = input(">>> ").split(',')
-      temps = [0,0]
-      for i in range(2):
+      temps = []
+      for i in range(len(funcs)):
         funcs[i].strip()
         if not hasattr(uf, funcs[i]):
           newfunc(f"temp{i}(x) = {funcs[i]}")
-          temps[i] = getattr(uf, f"temp{i}")
+          temps.append(getattr(uf, f"temp{i}"))
         else:
-          temps[i] = getattr(uf, funcs[i])
-      compare_plot(temps[0], temps[1], step)
+          temps.append(getattr(uf, funcs[i]))
+      compare_plot(temps, step)
+      with open("userfuncs.py", "w+") as usrfs:
+        for line in user_funcs_before:
+          usrfs.write(line)
+      for i in range(len(funcs)):
+        delattr(uf, f"temp{i}")
+      importlib.reload(uf)
 
       
-
 main()

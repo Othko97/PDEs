@@ -10,6 +10,7 @@ import math
 import numpy as np
 import scipy.integrate as intgr
 import matplotlib.pyplot as plt
+import matplotlib.cm as cmx
 
 ###########
 #FUNCTIONS#
@@ -170,13 +171,14 @@ def plot(f, step):
   plt.plot(X, Y)
   plt.show()
 
-def compare_plot(f, g, step):
+def compare_plot(F, step):
   X = [step*x for x in range(int(1/step)+1)]
-  Yf = [f(x) for x in X]
-  Yg = [g(x) for x in X]
+  Y = []
+  for f in F:
+    Y.append([f(x) for x in X])
+  for i in range(len(Y)):
+    plt.plot(X, Y[i])
 
-  lines = plt.plot(X, Yf, 'r', X, Yg, 'b')
   plt.xlabel('x')
   plt.ylabel('y')
-  plt.legend(lines, ('y='+f.__name__+'(x)', 'y='+g.__name__+'(x)'))
   plt.show()
