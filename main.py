@@ -105,6 +105,20 @@ def main():
       else:
         temp = getattr(uf, func)
       plot(temp, step)
+    
+    elif command == "COMPARE":
+      print("\nEnter Functions separated by a comma (,):")
+      funcs = input(">>> ").split(',')
+      temps = [0,0]
+      for i in range(2):
+        funcs[i].strip()
+        if not hasattr(uf, funcs[i]):
+          newfunc(f"temp{i}(x) = {funcs[i]}")
+          temps[i] = getattr(uf, f"temp{i}")
+        else:
+          temps[i] = getattr(uf, funcs[i])
+      compare_plot(temps[0], temps[1], step)
+
       
 
 main()
