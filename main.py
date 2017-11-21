@@ -51,7 +51,7 @@ def delfunc(func):
 ###########
 with open("userfuncs.py", "r") as usrfs:
   user_funcs_init = usrfs.readlines()
-step = 0.001
+
 
 ########################
 #DEFINING MAIN FUNCTION#
@@ -59,9 +59,11 @@ step = 0.001
 
 def main():
   run = True
-
+  step = 0.001
+  acc = 4
+  
   while run == True:
-    command = input(">> ").upper()
+    command = input("> ").upper()
 
     if command == "QUIT":
       run = False
@@ -85,10 +87,10 @@ def main():
       print(u"\n Given basis functions h_i(x), u(x) = \u03A3(\u03B2_i * h_i)")
 
       for i in range(0, n):
-        print(f"\u03B2_{i+1}: {B[i][0]}")
+        print(f"\u03B2_{i+1}: {round(B[i][0], acc)}")
 
       print("\nSave solution as (leave blank to not save): ")
-      name = input(">>> ")
+      name = input(">> ")
       if name != "":
         setattr(uf, name, sol_func_BC(n, rhs)) 
       
@@ -96,11 +98,11 @@ def main():
     
     elif command == "NEW":
       print("\nEnter function in the form 'f(x) = <algebraic expression>'")
-      newfunc(input(">>> "))
+      newfunc(input(">> "))
 
     elif command == "PLOT":
       print("\nEnter function: ")
-      func = input(">>> ")
+      func = input(">> ")
       if not hasattr(uf, func):
         newfunc(f"temp(x) = {func}")
         temp = getattr(uf, "temp")
@@ -112,7 +114,7 @@ def main():
       with open("userfuncs.py", "r") as usrfs:
         user_funcs_before = usrfs.readlines()
       print("\nEnter Functions separated by a comma (,):")
-      funcs = input(">>> ").split(',')
+      funcs = input(">> ").split(',')
       temps = []
       for i in range(len(funcs)):
         funcs[i] = funcs[i].strip()
@@ -131,7 +133,29 @@ def main():
       importlib.reload(uf)
 
     elif command == "DEL":
-      delfunc(input(">>> "))
-
+      delfunc(input(">> "))
+    
+    elif command == "EVAL":
+      print("\nEnter Functions separated by a comma (,):")
+      funcs = input(">> ").split(',')
+      temps = []
+      for i in range(len(funcs)):
+        funcs[i] = funcs[i].strip()
+        if not hasattr(uf, funcs[i]):
+          newfunc(f"temp{i}(x) = {funcs[i]}")
+          temps.append(getattr(uf, f"temp{i}"))
+        else:
+          temps.append(getattr(uf, funcs[i]))
+          setattr(uf, f"temp{i}", 0)
+      print(format_table(create_table(temps, step, acc)))
+    
+    elif command == "SETTINGS":
+      print("Enter setting to change:")
+      opt = input(">> ").upper()
+      if opt == "ACC":
+        acc = int(input(">>> "))
+      elif opt == "STEP":
+        step = float(input(">>> "))
+      
       
 main()

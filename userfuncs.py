@@ -1,4 +1,4 @@
-"""File to hold functions inputted by user"""
+"""Storage for user defined functions"""
 
 #########
 #IMPORTS#
