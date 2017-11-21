@@ -165,6 +165,7 @@ def sol_func_BC(n, f):
 
 #Plotting
 def plot(f, step):
+  """Plots a function f on (0,1) by evaluating at 1/step points in the interval"""
   X = [step*x for x in range(int(1/step)+1)]
   Y = [f(x) for x in X]
 
@@ -172,6 +173,7 @@ def plot(f, step):
   plt.show()
 
 def compare_plot(F, step):
+  """Plots arbitrarily many functions from a list F on the same axes"""
   X = [step*x for x in range(int(1/step)+1)]
   Y = [[F[i](x) for x in X] for i in range(len(F))]
   for i in range(len(Y)):
@@ -180,3 +182,27 @@ def compare_plot(F, step):
   plt.xlabel('x')
   plt.ylabel('y')
   plt.show()
+
+#Tables
+def create_table(F, step, acc):
+  """Generates a table of values with interval step, functions in F to accuracy acc"""
+  X = [step*x for x in range(int(1/step)+1)]
+  Y = [[F[i](x) for x in X] for i in range(len(F))]
+  Y.insert(0, X)
+  table = [[round(Y[i][j], acc) for j in range(len(X))] for i in range(len(Y))]
+  return table
+
+def format_table(table):
+  """Takes a table and transforms it to a string, ready for printing"""
+  table[0].insert(0, "X")
+  for i in range(1, len(table)):
+    table[i].insert(0, f"Y{i}")
+  colwidths = [2+max([len(str(entry)) for entry in col]) for col in table]
+  stringtable = [[str(col[i]).rjust(colwidths[table.index(col)]) for col in table] for i in range(len(table[0]))]
+  fstring = ""
+  for row in stringtable:
+    printline = ""
+    for entry in row:
+      printline += entry
+    fstring += (printline + "\n")
+  return fstring
