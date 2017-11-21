@@ -22,12 +22,20 @@ def add(f, g):
   """Takes the sum of two functions i.e. f+g = f(x) + g(x)"""
   return lambda x: f(x) + g(x)
 
+def subtract(f, g):
+  """Takes the difference of two functions i.e. f-g = f(x) - g(x)"""
+  return add(f, scalarprod(-1, g))
+
 def prod(f, g):
   """Takes the product of two functions i.e fg = f(x)g(x)"""
   return lambda x: f(x) * g(x)
 
+def divide(f, g):
+  """Takes the quotient of two functions i.e. f/g = f(x) / g(x)"""
+  return lambda x: f(x) / g(x)
+
 def innerprod(f, g):
-  """Take the inner product of functions f, g on H^1_0(0,1)"""
+  """Take the inner product of functions f, g on H^1(0,1)"""
   return intgr.quad(prod(f, g), 0, 1)[0]
 
 def scalarprod(a, f):
@@ -40,7 +48,7 @@ def compare(f, g, step):
 
 #Functions on lists of functions (can be thought of as vectors in H_k)
 def multiscalarprod(A, F):
-  """Take dot product of a list of scalars and a list of functions"""
+  """Take dot product of a list of scalars and a list of functions (I say a dot product as one may consider a scalar a as f(x)=a)"""
   return [scalarprod(a, f) for a,f in zip(A, F)]
 
 def fsum(F):

@@ -20,7 +20,6 @@ def newfunc(s):
   lhs  = lhs.replace(var, 'x')
   func = s.split('=')[1].strip().replace(var, 'x')
 
-
   with open("userfuncs.py", "a+") as usrfs:
     if not hasattr(uf, name):
       usrfs.write(f"\n\ndef {lhs}:\n  return {func}")
@@ -29,6 +28,7 @@ def newfunc(s):
       usrfs.write(f"\n\ndef {lhs}:\n  return {func}")
 
   importlib.reload(uf)
+
 
 def delfunc(func):
   """Deletes a user defined function from userfuncs.py"""
@@ -44,6 +44,7 @@ def delfunc(func):
       else:
         i += 2
   delattr(uf, func)
+  importlib.reload(uf)
 
 
 
