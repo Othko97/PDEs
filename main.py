@@ -43,6 +43,7 @@ def delfunc(func):
         i += 1
       else:
         i += 2
+  delattr(uf, func)
 
 
 
