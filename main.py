@@ -6,7 +6,7 @@
 from TwoDGalerkin import *
 import userfuncs as uf
 import importlib
-import time
+import math
 
 ###########
 #FUNCTIONS#
@@ -34,14 +34,15 @@ def delfunc(func):
   """Deletes a user defined function from userfuncs.py"""
   with open("userfuncs.py", "r") as usrfs:
     lines = usrfs.readlines()
-  with open("userfuncs.py", "w") as usrfs:
-    count = 4
-    for i in range(len(lines)-1):
+  with open("userfuncs.py", "w+") as usrfs:
+    i = 1
+    while i < len(lines):
       line = lines[i]
       if line != f"def {func}(x):\n":
         usrfs.write(line)
+        i += 1
       else:
-        i += 3
+        i += 2
 
 
 
@@ -114,12 +115,13 @@ def main():
       funcs = input(">>> ").split(',')
       temps = []
       for i in range(len(funcs)):
-        funcs[i].strip()
+        funcs[i] = funcs[i].strip()
         if not hasattr(uf, funcs[i]):
           newfunc(f"temp{i}(x) = {funcs[i]}")
           temps.append(getattr(uf, f"temp{i}"))
         else:
           temps.append(getattr(uf, funcs[i]))
+          setattr(uf, f"temp{i}", 0)
       compare_plot(temps, step)
       with open("userfuncs.py", "w+") as usrfs:
         for line in user_funcs_before:
@@ -127,6 +129,9 @@ def main():
       for i in range(len(funcs)):
         delattr(uf, f"temp{i}")
       importlib.reload(uf)
+
+    elif command == "DEL":
+      delfunc(input(">>> "))
 
       
 main()

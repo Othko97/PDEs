@@ -173,9 +173,7 @@ def plot(f, step):
 
 def compare_plot(F, step):
   X = [step*x for x in range(int(1/step)+1)]
-  Y = []
-  for f in F:
-    Y.append([f(x) for x in X])
+  Y = [[F[i](x) for x in X] for i in range(len(F))]
   for i in range(len(Y)):
     plt.plot(X, Y[i])
 
